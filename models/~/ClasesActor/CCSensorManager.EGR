@@ -1,0 +1,330 @@
+[Version Actor SW]
+5
+0
+0
+0
+0
+[Modificado]
+0
+0
+0
+[Estructura]
+[Version Estructura]
+3
+[Parametro]
+NULL
+ 
+ 
+[FinParametro]
+[Stack]
+8
+[FinStack]
+[Puertos]
+4
+[Version Puerto]
+0
+SensorMngCtrl
+0
+1
+0
+[Version Grafico Puerto]
+0
+41
+4
+CPSensorMngCtrl
+[Version Puerto]
+0
+CmpHK
+0
+1
+0
+[Version Grafico Puerto]
+0
+93
+42
+CPCmpHK
+[Version Puerto]
+0
+TMChannelCtrl
+1
+1
+0
+[Version Grafico Puerto]
+0
+44
+93
+CPTMChannelCtrl
+[Version Puerto]
+0
+RxTimeCode
+0
+1
+1
+[Version Grafico Puerto]
+0
+40
+36
+CPRxTimeCode
+[FinPuertos]
+[ActoresComponente]
+0
+[FinActoresComponente]
+[Uniones]
+0
+[FinUniones]
+[NumTimers]
+0
+[FinNumTimers]
+[NumMsgDef]
+10
+[FinNumMsgDef]
+[FinEstructura]
+[Comportamiento]
+[Version Comportamiento]
+3
+0
+[Pools]
+2
+[Version PoolDatosMens]
+0
+EDROOMPoolCDTMList
+CDTMList
+10
+[Version PoolDatosMens]
+0
+EDROOMPoolCDEventList
+CDEventList
+10
+[Modulos]
+1
+[Version Modulo]
+1
+icuasw_pus_services_iface
+ 
+v1
+ 
+1
+1
+[Eventos]
+1
+[Event]
+[Version]
+1
+EvIRQRxTimeCode
+External
+[Maquina de Estados]
+[Version Maquina de Estados]
+1
+Top
+NULL
+[Subestados]
+2
+[Version SubEstados]
+3
+I
+;
+;
+;
+;
+;
+0
+0
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+73 73 55 55
+[FinObjetoGrafico]
+Ready
+;
+;
+;
+;
+;
+1
+0
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+198 220 348 151
+[FinObjetoGrafico]
+[PuntosEleccion]
+0
+[Version PuntosEleccion]
+2
+[Transiciones]
+3
+[Version Transicion]
+5
+Init
+I
+OSubEstI
+Ready
+DSubEst
+;
+[Trigger]
+EDROOMsl
+EDROOMStart
+true
+ 
+ 
+ 
+;
+;
+;
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+124 112 198 292 0
+[FinGraficoTransicion]
+ExecTC
+Ready
+OSubEst
+Ready
+DSubEst
+;
+[Trigger]
+SensorMngCtrl
+SSensorTC
+true
+ 
+ 
+ 
+FExecSensorTC();
+;
+FSendTMList();
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+254 220 500 220 4
+[FinGraficoTransicion]
+ProcessSensorTM
+Ready
+OSubEst
+Ready
+DSubEst
+;
+[Trigger]
+RxTimeCode
+EDROOMIRQsignal
+true
+ 
+ 
+ 
+FProcessSensorsTM();
+FIamAlive();
+FSendTMList();
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+253 371 490 371 5
+[FinGraficoTransicion]
+[VariablesConstantes]
+2
+[Version VariYConst]
+0
+VCurrentEvList
+CDEventList
+
+Variable
+0
+[Version VariYConst]
+0
+VCurrentTMList
+CDTMList
+
+Variable
+0
+[Metodos]
+4
+[Version Metodos]
+21
+MsgDataHandler
+FExecSensorTC()
+0
+0
+0
+0
+1
+ 
+4
+	
+		// Data access
+	
+  PUS_SensorsTC::ExecTC(varSSensorTC,VCurrentTMList,VCurrentEvList);
+[ServiceRequest]
+Msg->data
+SensorMngCtrl
+SSensorTC
+CDTCDescriptor
+EDROOMprioNormal
+SendMsg
+FIamAlive()
+0
+0
+0
+0
+1
+ 
+4
+	
+		// Complete Data 
+	
+ *pSIAmAlive_Data=VCurrentEvList;
+[ServiceRequest]
+send
+CmpHK
+SIAmAlive
+CDEventList
+EDROOMprioNormal
+MsgDataHandler
+FProcessSensorsTM()
+0
+0
+0
+0
+1
+ 
+5
+	
+		// Data access
+ 
+PUSService21::ProcessSensorTM( varEDROOMIRQsignal,
+                               VCurrentTMList,VCurrentEvList);
+[ServiceRequest]
+Msg->data
+RxTimeCode
+EDROOMIRQsignal
+CDSensorTMBufferStatus
+EDROOMprioVeryHigh
+InvokeMsg
+FSendTMList()
+0
+0
+0
+0
+1
+ 
+6
+	
+		// Complete Data 
+	
+	*pSTxTMList_Data=VCurrentTMList;
+	VCurrentTMList.Clear();
+ 
+[ServiceRequest]
+invoke
+TMChannelCtrl
+STxTMList
+CDTMList
+EDROOMprioVeryHigh
+[MaquinasSubEstados]
+0
+[FinMaquinasSubEstados]
+[Fin Maquina de Estados]
+[FinComportamiento]

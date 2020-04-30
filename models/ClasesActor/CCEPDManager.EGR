@@ -1,0 +1,556 @@
+[Version Actor SW]
+5
+0
+0
+0
+0
+[Modificado]
+0
+0
+0
+[Estructura]
+[Version Estructura]
+3
+[Parametro]
+NULL
+ 
+ 
+[FinParametro]
+[Stack]
+1
+[FinStack]
+[Puertos]
+4
+[Version Puerto]
+0
+TMChannelCtrl
+1
+1
+0
+[Version Grafico Puerto]
+0
+13
+93
+CPTMChannelCtrl
+[Version Puerto]
+0
+RxTC
+0
+1
+1
+[Version Grafico Puerto]
+0
+49
+35
+CPTxTC
+[Version Puerto]
+0
+HK_FDIRCtrl
+1
+1
+0
+[Version Grafico Puerto]
+0
+41
+93
+CPHK_FDIRCtrl
+[Version Puerto]
+0
+BKGExecCtrl
+1
+1
+0
+[Version Grafico Puerto]
+0
+78
+93
+CPBKGExecCtrl
+[FinPuertos]
+[ActoresComponente]
+0
+[FinActoresComponente]
+[Uniones]
+0
+[FinUniones]
+[NumTimers]
+0
+[FinNumTimers]
+[NumMsgDef]
+10
+[FinNumMsgDef]
+[FinEstructura]
+[Comportamiento]
+[Version Comportamiento]
+3
+0
+[Pools]
+2
+[Version PoolDatosMens]
+0
+EDROOMPoolCDTMList
+CDTMList
+10
+[Version PoolDatosMens]
+0
+EDROOMPoolCDTCDescriptor
+CDTCDescriptor
+10
+[Modulos]
+2
+[Version Modulo]
+1
+icuasw_pus_services_iface
+ 
+v1
+ 
+1
+1
+[Version Modulo]
+1
+sc_channel_drv_iface
+ 
+v1
+ 
+1
+1
+[Eventos]
+1
+[Event]
+[Version]
+1
+EvIRQRxTC
+External
+[Maquina de Estados]
+[Version Maquina de Estados]
+1
+Top
+NULL
+[Subestados]
+4
+[Version SubEstados]
+3
+I
+;
+;
+;
+;
+;
+0
+0
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+73 73 55 55
+[FinObjetoGrafico]
+Ready
+;
+;
+;
+;
+;
+1
+0
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+179 146 143 315
+[FinObjetoGrafico]
+Reboot
+;
+;
+;
+;
+;
+1
+0
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+509 96 90 60
+[FinObjetoGrafico]
+ValidTC
+;
+;
+;
+;
+;
+1
+1
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+483 565 143 43
+[FinObjetoGrafico]
+[PuntosEleccion]
+2
+[Version PuntosEleccion]
+2
+NewRxTC
+0
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+238 574 35 35
+[FinObjetoGrafico]
+HandleTC
+0
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+536 317 35 35
+[FinObjetoGrafico]
+NewRxTC
+0
+[Ramas]
+2
+[Version Ramas]
+5
+Accepted
+GAcceptTC()
+ValidTC
+DSubEst
+;
+ 
+ 
+ 
+;
+;
+FTxTMList();
+;
+[GraficoRama]
+[Version GraficoRama]
+0
+272 591 483 588 1
+[FinGraficoRama]
+NotAccepted
+true
+Ready
+DSubEst
+;
+ 
+ 
+ 
+;
+;
+FTxTMList();
+;
+[GraficoRama]
+[Version GraficoRama]
+0
+238 591 179 420 3
+[FinGraficoRama]
+HandleTC
+0
+[Ramas]
+4
+[Version Ramas]
+5
+ToReboot
+GToReboot()
+Reboot
+DSubEst
+FExecPrioTC();
+ 
+ 
+ 
+;
+;
+FTxTMList();
+;
+[GraficoRama]
+[Version GraficoRama]
+0
+553 317 550 156 3
+[FinGraficoRama]
+ExecPrioTC
+true
+Ready
+DSubEst
+FExecPrioTC();
+ 
+ 
+ 
+;
+;
+FTxTMList();
+;
+[GraficoRama]
+[Version GraficoRama]
+0
+536 334 322 159 3
+[FinGraficoRama]
+FwdHK_FDIRTC
+GGFwdToHK_FDIR()
+Ready
+DSubEst
+;
+ 
+ 
+ 
+;
+FFwdHK_FDIRTC();
+;
+;
+[GraficoRama]
+[Version GraficoRama]
+0
+542 348 322 252 3
+[FinGraficoRama]
+FwdBKGTC
+GFwdToBKG()
+Ready
+DSubEst
+;
+ 
+ 
+ 
+;
+FFwdBKGTC();
+;
+;
+[GraficoRama]
+[Version GraficoRama]
+0
+541 347 322 325 3
+[FinGraficoRama]
+[Transiciones]
+3
+[Version Transicion]
+5
+Init
+I
+OSubEstI
+Ready
+DSubEst
+FInit();
+[Trigger]
+EDROOMsl
+EDROOMStart
+true
+ 
+ 
+ 
+;
+;
+;
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+119 119 179 184 0
+[FinGraficoTransicion]
+NewRxTC
+Ready
+OSubEst
+NewRxTC
+DPEleccion
+;
+[Trigger]
+RxTC
+EDROOMIRQsignal
+true
+ 
+ 
+ 
+FGetTC();
+;
+;
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+252 461 255 574 0
+[FinGraficoTransicion]
+HandleTC
+ValidTC
+OSubEst
+HandleTC
+DPEleccion
+;
+[Trigger]
+ 
+ 
+ 
+ 
+ 
+ 
+;
+;
+;
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+558 565 553 351 3
+[FinGraficoTransicion]
+[VariablesConstantes]
+3
+[Version VariYConst]
+0
+VCurrentEvList
+CDEventList
+
+Variable
+0
+[Version VariYConst]
+0
+VCurrentTC
+CDTCDescriptor
+
+Variable
+0
+[Version VariYConst]
+0
+VCurrentTMList
+CDTMList
+
+Variable
+0
+[Metodos]
+10
+[Version Metodos]
+21
+BasicAction
+FExecPrioTC()
+0
+0
+0
+0
+1
+ 
+1
+ PUS_PrioTC::ExecTC(VCurrentTC,VCurrentTMList,VCurrentEvList);
+SendMsg
+FFwdBKGTC()
+0
+0
+0
+0
+1
+ 
+4
+	
+		// Complete Data 
+	
+	*pSBKGTC_Data=VCurrentTC;
+[ServiceRequest]
+send
+BKGExecCtrl
+SBKGTC
+CDTCDescriptor
+EDROOMprioNormal
+SendMsg
+FFwdHK_FDIRTC()
+0
+0
+0
+0
+1
+ 
+2
+ 
+	*pSHK_FDIR_TC_Data=VCurrentTC;
+[ServiceRequest]
+send
+HK_FDIRCtrl
+SHK_FDIR_TC
+CDTCDescriptor
+EDROOMprioNormal
+MsgDataHandler
+FGetTC()
+0
+0
+0
+0
+1
+ 
+4
+	
+		// Data access
+	
+	VCurrentTC=varEDROOMIRQsignal;
+[ServiceRequest]
+Msg->data
+RxTC
+EDROOMIRQsignal
+CDTCDescriptor
+ 
+BasicAction
+FInit()
+0
+0
+0
+0
+1
+ 
+2
+RxTC.InstallHandler();
+Init_sc_channel();
+InvokeMsg
+FTxTMList()
+0
+0
+0
+0
+1
+ 
+5
+	
+		// Complete Data 
+	
+	*pSTxTM_Data=VCurrentTMList;    
+	VCurrentTMList.Clear();
+[ServiceRequest]
+invoke
+TMChannelCtrl
+STxTM
+CDTMList
+EDROOMprioVeryHigh
+Guard
+GAcceptTC()
+0
+0
+0
+0
+1
+ 
+1
+return PUSService1::AcceptTC(VCurrentTC,VCurrentTMList);
+Guard
+GFwdToBKG()
+0
+0
+0
+0
+1
+ 
+1
+return VCurrentTC.IsBKGTC();
+Guard
+GGFwdToHK_FDIR()
+0
+0
+0
+0
+1
+ 
+1
+return VCurrentTC.IsHK_FDIRTC();
+Guard
+GToReboot()
+0
+0
+0
+0
+1
+ 
+1
+return VCurrentTC.IsRebootTC();
+[MaquinasSubEstados]
+0
+[FinMaquinasSubEstados]
+[Fin Maquina de Estados]
+[FinComportamiento]

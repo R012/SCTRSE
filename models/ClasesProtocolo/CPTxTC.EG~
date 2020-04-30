@@ -1,0 +1,43 @@
+[Version Protocolo]
+9
+0
+1
+0
+18
+1
+EDROOMprioVeryHigh
+5
+#ifdef A3P_PLATFORM 
+ 
+EDROOMIRQ18BottomHalfSignal=EDROOMVarIRQ18.HandleIRQ();
+ 
+#endif
+1
+1
+0
+5
+#ifndef A3P_PLATFORM 
+ 
+GetNextTC(&EDROOMVarIRQ18);
+ 
+#endif
+1
+0
+10
+0
+0
+1
+[Version Mensaje]
+1
+[Version Senal]
+0
+EDROOMIRQsignal
+[Version Dato]
+1
+CDTCDescriptor
+Z:\home\osboxes\Desktop\Models\EPD_ICU_ASW_PUS_3_X_20_X\
+es.uah.aut.srg.edroom.mclev.data_sai.cdtcdescriptor
+v1
+0
+0
+0

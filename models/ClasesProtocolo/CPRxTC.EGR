@@ -1,0 +1,34 @@
+[Version Protocolo]
+9
+0
+1
+0
+7
+1
+EDROOMprioVeryHigh
+0
+1
+1
+0
+1
+GetNextTC(&EDROOMVarIRQ7);
+1
+0
+10
+0
+0
+1
+[Version Mensaje]
+1
+[Version Senal]
+0
+EDROOMIRQsignal
+[Version Dato]
+1
+CDTCDescriptor
+Z:\home\user\Desktop\Models\ICUASW\
+es.uah.aut.srg.edroom.mclev.data_sai.cdtcdescriptor
+v1
+0
+0
+0

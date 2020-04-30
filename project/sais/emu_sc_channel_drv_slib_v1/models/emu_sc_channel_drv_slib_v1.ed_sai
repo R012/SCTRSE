@@ -1,0 +1,12 @@
+
+
+/*
+ * SAI Model.
+*/ 
+
+
+sai emu_sc_channel_drv_slib{
+
+	uri := .emu_sc_channel_drv_slib;
+	version :=v1;
+};

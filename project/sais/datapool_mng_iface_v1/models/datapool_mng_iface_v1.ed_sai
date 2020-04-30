@@ -1,0 +1,12 @@
+
+
+/*
+ * SAI Model.
+*/ 
+
+
+sai datapool_mng_iface{
+
+	uri := .datapool_mng_iface;
+	version :=v1;
+};

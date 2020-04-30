@@ -1,0 +1,316 @@
+[Version Actor SW]
+5
+0
+0
+0
+0
+[Modificado]
+1
+1
+0
+[Estructura]
+[Version Estructura]
+3
+[Parametro]
+NULL
+ 
+ 
+[FinParametro]
+[Stack]
+1
+[FinStack]
+[Puertos]
+3
+[Version Puerto]
+0
+HK_FDIRTimer
+0
+1
+1
+[Version Grafico Puerto]
+0
+79
+17
+EDROOMTimingSAP
+[Version Puerto]
+0
+TMChannelCtrl
+1
+1
+0
+[Version Grafico Puerto]
+0
+48
+93
+CPTMChannelCtrl
+[Version Puerto]
+0
+HK_FDIRCtrl
+0
+1
+0
+[Version Grafico Puerto]
+0
+46
+4
+CPHK_FDIRCtrl
+[FinPuertos]
+[ActoresComponente]
+0
+[FinActoresComponente]
+[Uniones]
+0
+[FinUniones]
+[NumTimers]
+2
+[FinNumTimers]
+[NumMsgDef]
+10
+[FinNumMsgDef]
+[FinEstructura]
+[Comportamiento]
+[Version Comportamiento]
+3
+0
+[Pools]
+1
+[Version PoolDatosMens]
+0
+EDROOMPoolCDTMList
+CDTMList
+10
+[Modulos]
+2
+[Version Modulo]
+1
+icuasw_pus_services_iface
+
+v1
+
+1
+0
+[Version Modulo]
+1
+sc_channel_drv_iface
+
+v1
+
+1
+0
+[Eventos]
+1
+[Event]
+[Version]
+1
+EvTimerHK_FDIRTimer
+Timer
+[Maquina de Estados]
+[Version Maquina de Estados]
+1
+Top
+NULL
+[Subestados]
+2
+[Version SubEstados]
+3
+I
+;
+;
+;
+;
+;
+0
+0
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+73 73 55 55
+[FinObjetoGrafico]
+Ready
+;
+;
+;
+;
+;
+1
+0
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+237 224 205 160
+[FinObjetoGrafico]
+[PuntosEleccion]
+0
+[Version PuntosEleccion]
+2
+[Transiciones]
+3
+[Version Transicion]
+5
+Init
+I
+OSubEstI
+Ready
+DSubEst
+FInitHK_FDIR();
+[Trigger]
+EDROOMsl
+EDROOMStart
+true
+ 
+ 
+ 
+;
+;
+;
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+110 125 237 304 0
+[FinGraficoTransicion]
+DoHK_FDIR
+Ready
+OSubEst
+Ready
+DSubEst
+FDoHK_FDIR();
+[Trigger]
+HK_FDIRTimer
+EDROOMSignalTimeout
+true
+ 
+ 
+ 
+;
+;
+FTxTMList();
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+278 224 393 224 4
+[FinGraficoTransicion]
+ExecTC
+Ready
+OSubEst
+Ready
+DSubEst
+;
+[Trigger]
+HK_FDIRCtrl
+SHK_FDIR_TC
+true
+ 
+ 
+ 
+FExecHK_FDIR_TC();
+;
+FTxTMList();
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+442 361 442 258 7
+[FinGraficoTransicion]
+[VariablesConstantes]
+2
+[Version VariYConst]
+0
+VNextTimeout
+Pr_Time
+
+Variable
+0
+[Version VariYConst]
+0
+VCurrentTMList
+CDTMList
+
+Variable
+0
+[Metodos]
+4
+[Version Metodos]
+21
+Inform
+FInitHK_FDIR()
+0
+0
+0
+0
+1
+
+3
+	time.GetTime(); // Get current monotonic time
+	time+=Pr_Time(1,0); // Add X sec + Y microsec
+	VNextTimeout=time;
+[ServiceRequest]
+InformAt
+HK_FDIRTimer
+EDROOMSignalTimeout
+
+
+Inform
+FDoHK_FDIR()
+0
+0
+0
+0
+1
+
+3
+	VNextTimeout+=Pr_Time(1,0); // Add X sec + Y microsec
+	time=VNextTimeout;
+	PUSService3::DoHK(VCurrentTMList);
+[ServiceRequest]
+InformAt
+HK_FDIRTimer
+EDROOMSignalTimeout
+
+
+InvokeMsg
+FTxTMList()
+0
+0
+0
+0
+1
+
+5
+	
+		// Complete Data 
+	
+	*pSTxTM_Data=VCurrentTMList;    
+	VCurrentTMList.Clear();
+[ServiceRequest]
+invoke
+TMChannelCtrl
+STxTM
+CDTMList
+EDROOMprioVeryHigh
+MsgDataHandler
+FExecHK_FDIR_TC()
+0
+0
+0
+0
+1
+
+2
+	CDEventList TCExecEventList;
+	PUS_HK_FDIRTC::ExecTC(varSHK_FDIR_TC,VCurrentTMList,TCExecEventList);
+[ServiceRequest]
+Msg->data
+HK_FDIRCtrl
+SHK_FDIR_TC
+CDTCDescriptor
+EDROOMprioVeryHigh
+[MaquinasSubEstados]
+0
+[FinMaquinasSubEstados]
+[Fin Maquina de Estados]
+[FinComportamiento]

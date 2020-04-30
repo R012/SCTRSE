@@ -1,0 +1,34 @@
+[Version Protocolo]
+9
+0
+0
+0
+0
+0
+1
+[Version Mensaje]
+1
+[Version Senal]
+0
+SHK_FDIR_TC
+[Version Dato]
+1
+CDTCDescriptor
+Z:\home\osboxes\Desktop\Models\EPD_ICU_ASW_PUS_3_X_20_X\
+es.uah.aut.srg.edroom.mclev.data_sai.cdtcdescriptor
+v1
+0
+1
+[Version Mensaje]
+1
+[Version Senal]
+0
+SRecAction
+[Version Dato]
+1
+CDRecovAction
+Z:\home\osboxes\Desktop\Models\EPD_ICU_ASW_PUS_3_X_20_X\
+es.uah.aut.srg.edroom.mclev.data_sai.cdrecovaction
+v1
+0
+0
