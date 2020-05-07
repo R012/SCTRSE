@@ -155,6 +155,7 @@ ParamLimitCheckDefinition_t PUSService12::PARAMLimitDefinition[DATAPOOL_PARAMNum
 void  PUSService12::ExecTC( CDTCDescriptor &TC, CDTMList &List){
 
   switch(TC.dataFieldHeader.subservice){
+
                   case(1):
                      Exec12_1TC(TC,List);
                      break;
@@ -162,7 +163,7 @@ void  PUSService12::ExecTC( CDTCDescriptor &TC, CDTMList &List){
                      Exec12_2TC(TC,List);
                      break;
                   case(5):
-                    Exec12_5TC(TC,List);
+                     Exec12_5TC(TC,List);
                   break;
                   case(8):
                    List.Add(12,9);
@@ -258,6 +259,7 @@ void PUSService12::DoMonitoring(CDTMList &List, CDEventList & eventList){
       if(PARAMMonitoringConfig[i].enabled){
 
         if(PARAMMonitoringConfig[i].intervalControl>=PARAMMonitoringConfig[i].interval){
+        	// si pasamos el tiempo del intevalo comprobamos rango
           PARAMMonitoringConfig[i].intervalControl=0;
           //Monitor Limits
 
@@ -266,28 +268,38 @@ void PUSService12::DoMonitoring(CDTMList &List, CDEventList & eventList){
 
               if(PARAMLimitDefinition[i].highLimit
                   < PUSServices::DATAPOOL_PARAMCurrentValue[i]){
-                  eventList.AddEvent(PARAMLimitDefinition[i].highLimitRID);
-                  uint8_t aux[256];
-                  byte_t *auxP=aux;
-                  SetUInt16(PARAMLimitDefinition[i].highLimitRID,auxP);
 
-                  List.Add(5,4,aux);
+            	  // se pasa por arriba
+
+                  eventList.AddEvent(PARAMLimitDefinition[i].highLimitRID);
+                  //uint8_t aux[256];//e
+                  //byte_t *auxP=aux;
+                  //SetUInt16(PARAMLimitDefinition[i].highLimitRID,auxP);
+
+                  //List.Add(5,4,aux);//e
                   PARAMLimitDefinition[i].prevstatus=PARAMLimitDefinition[i].status;
                   PARAMLimitDefinition[i].status=MonitorInvalid;
 
 
                   PARAMLimitDefinition[i].transition_Y2K=PUSService9::GetCurrentUniTimeY2K();
+
+
               }else if(PARAMLimitDefinition[i].lowLimit
                                 > PUSServices::DATAPOOL_PARAMCurrentValue[i]){
+
+            	  // se pasa por abajo
+
                   eventList.AddEvent(PARAMLimitDefinition[i].lowLimitRID);
-                  uint8_t aux[256];
-                  byte_t *auxP=aux;
-                  SetUInt16(PARAMLimitDefinition[i].lowLimitRID,auxP);
-                  List.Add(5,4,aux);
+                  //uint8_t aux[256];//e
+                  //byte_t *auxP=aux;
+                  //SetUInt16(PARAMLimitDefinition[i].lowLimitRID,auxP);
+                  //List.Add(5,4,aux);//e
                   PARAMLimitDefinition[i].prevstatus=PARAMLimitDefinition[i].status;
                   PARAMLimitDefinition[i].status=MonitorInvalid;
                   PARAMLimitDefinition[i].transition_Y2K=PUSService9::GetCurrentUniTimeY2K();
+
               }else{
+
                   if(PARAMLimitDefinition[i].status==MonitorUnchecked){
                     PARAMLimitDefinition[i].prevstatus=PARAMLimitDefinition[i].status;
                     PARAMLimitDefinition[i].transition_Y2K=PUSService9::GetCurrentUniTimeY2K();
@@ -296,6 +308,9 @@ void PUSService12::DoMonitoring(CDTMList &List, CDEventList & eventList){
               }
 
             }else{
+
+            	//no se pasa
+
                 printf("high limit %i", (int) PARAMLimitDefinition[i].highLimit);
                 if((PARAMLimitDefinition[i].highLimit
                                 >PUSServices::DATAPOOL_PARAMCurrentValue[i])

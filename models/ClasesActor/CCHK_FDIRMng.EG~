@@ -244,16 +244,19 @@ FDoHK_FDIR()
 0
 1
  
-3
+6
 	VNextTimeout+=Pr_Time(1,0); // Add X sec + Y microsec
+	CDEventList eventList;
 	time=VNextTimeout;
 	PUSService3::DoHK(VCurrentTMList);
+	PUSService12::DoMonitoring(VCurrentTMList, eventList);
+	PUSService5::HandleEvents(eventList, VCurrentTMList);
 [ServiceRequest]
 InformAt
 HK_FDIRTimer
 EDROOMSignalTimeout
- 
- 
+
+EDROOMprioNormal
 MsgDataHandler
 FExecHK_FDIR_TC()
 0

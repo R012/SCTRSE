@@ -15,10 +15,23 @@ union RIDSerial_t{
     uint8_t  bytes[2];
 };
 
+
+struct RIDEnableConfig_t {
+	bool_t enabled;
+	uint16_t RID;
+};
+
+#define PUS_5_RIDNumber 16
+
 class PUSService5:public PUSServices{
 
 public:
+  static RIDEnableConfig_t RIDEnableConfig[PUS_5_RIDNumber];
+  static bool GetRIDEnableIndex(uint16_t RID, uint8_t &index);
+  static void HandleEvents( CDEventList & eventList, CDTMList &List);
   static void ExecTC( CDTCDescriptor &TC, CDTMList &List);
+  static void Exec5_5TC( CDTCDescriptor &TC, CDTMList &List);
+  static void Exec5_6TC( CDTCDescriptor &TC, CDTMList &List);
 
 };
 #endif

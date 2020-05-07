@@ -13,7 +13,7 @@ void  PUSService17::ExecTC( CDTCDescriptor &TC, CDTMList &List){
 
   switch(TC.dataFieldHeader.subservice){
                   case(1):
-                    List.Add(17,2);
+					List.Add(17,2);
                 	List.Add(1,7);
                   break;
                   default:

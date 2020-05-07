@@ -24,7 +24,7 @@ bool_t  PUSService1::AcceptTC( CDTCDescriptor &TC, CDTMList &List){
           case(5):
           case(6):
           case(31):
-          accepted=true;
+          	accepted=true;
           break;
           default:
             accepted=false;
@@ -34,9 +34,11 @@ bool_t  PUSService1::AcceptTC( CDTCDescriptor &TC, CDTMList &List){
         TC.tcexecCtrl=ExecAsHK_FDIRTC;
         switch(TC.dataFieldHeader.subservice){
               case(5):
+				accepted=true;
+                break;
               case(6):
-              //accepted=true;
-              break;
+              	accepted=true;
+              	break;
               default:
                 accepted=false;
             }
@@ -67,11 +69,17 @@ bool_t  PUSService1::AcceptTC( CDTCDescriptor &TC, CDTMList &List){
     case(12):
           switch(TC.dataFieldHeader.subservice){
                   case(1):
+					//accepted=true;
+                  	//break;
                   case(2):
+					//accepted=true;
+		            //break;
                   case(5):
+					//accepted=true;
+		          	//break;
                   case(6):
                   case(7):
-                    //accepted=true;
+                    accepted=true;
                     TC.tcexecCtrl=ExecAsHK_FDIRTC;
                     break;
                   case(8):
@@ -99,7 +107,7 @@ bool_t  PUSService1::AcceptTC( CDTCDescriptor &TC, CDTMList &List){
               case(2):
               case(4):
               case(5):
-              //accepted=true;
+              accepted=true;
               break;
               default:
                 accepted=false;
@@ -132,11 +140,11 @@ bool_t  PUSService1::AcceptTC( CDTCDescriptor &TC, CDTMList &List){
       switch(TC.dataFieldHeader.subservice){
               case(1):
                   TC.tcexecCtrl=ExecAsChangeModeTC;
-                 accepted=true;
+                 //accepted=true;
                 break;
               case(3):
                   TC.tcexecCtrl=ExecAsResetTC;
-                 accepted=true;
+                 //accepted=true;
                 break;
               case(2):
               case(4):

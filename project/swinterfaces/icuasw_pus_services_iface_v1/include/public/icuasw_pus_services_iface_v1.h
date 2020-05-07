@@ -206,8 +206,11 @@ class PUS_BKGTC {
      case(6):
          PUSService6::ExecTC( TC, List);
        break;
+     case(128):
+         PUSService128::ExecTC( TC, List);
+       break;
      case(20):
-         PUSService20::ExecTC( TC, List);
+          PUSService20::ExecTC( TC, List);
        break;
 
      default:

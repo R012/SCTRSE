@@ -81,6 +81,7 @@ protected:
 };
 
 #include <public/emu_sc_pus_service3.h>
+#include <public/emu_sc_pus_service5.h>
 #include <public/emu_sc_pus_service6.h>
 #include <public/emu_sc_pus_service9.h>
 #include <public/emu_sc_pus_service12.h>
