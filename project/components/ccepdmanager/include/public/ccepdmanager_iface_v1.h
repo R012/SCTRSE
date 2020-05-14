@@ -258,6 +258,7 @@ public:
 			HandleTC_FwdHK_FDIRTC,
 			HandleTC_FwdBKGTC,
 			HandleTC_ExecPrioTC,
+			RecActionTC,
 			EDROOMMemoryTrans };
 
 
@@ -339,6 +340,11 @@ public:
 		 * \brief  
 		 */
 		void	FGetTC();
+
+		/**
+		 * \brief  
+		 */
+		void	FHandleRecAction();
 
 		/**
 		 * \brief  

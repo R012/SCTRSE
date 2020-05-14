@@ -129,6 +129,20 @@ void	CCEPDManager::EDROOM_CTX_Top_0::FGetTC()
 
 
 
+void	CCEPDManager::EDROOM_CTX_Top_0::FHandleRecAction()
+
+{
+   //Handle Msg->data
+  CDRecovAction & varSRecAction = *(CDRecovAction *)Msg->data;
+	
+		// Data access
+	
+	PUSService19::GetRecActionTCDescriptor(varSRecAction,VCurrentTC);
+
+}
+
+
+
 void	CCEPDManager::EDROOM_CTX_Top_0::FInit()
 
 {
@@ -313,6 +327,13 @@ void CCEPDManager::EDROOM_SUB_Top_0::EDROOMBehaviour()
 					//Next State is Ready
 					edroomNextState = Ready;
 				 } 
+				break;
+			//Next Transition is RecActionTC
+			case (RecActionTC):
+				//Msg->Data Handling 
+				FHandleRecAction();
+				//Next State is ValidTC
+				edroomNextState = ValidTC;
 				break;
 			//To Choice Point HandleTC
 			case (HandleTC):
@@ -500,6 +521,19 @@ TEDROOMTransId CCEPDManager::EDROOM_SUB_Top_0::EDROOMReadyArrival()
 					//Next transition is  NewRxTC
 					edroomCurrentTrans.localId = NewRxTC;
 					edroomCurrentTrans.distanceToContext = 0 ;
+					edroomValidMsg=true;
+				 }
+
+				break;
+
+			case (SRecAction): 
+
+				 if (*Msg->GetPInterface() == HK_FDIRCtrl)
+				{
+
+					//Next transition is  RecActionTC
+					edroomCurrentTrans.localId= RecActionTC;
+					edroomCurrentTrans.distanceToContext = 0;
 					edroomValidMsg=true;
 				 }
 

@@ -79,6 +79,10 @@ public:
 			CDTMList	poolCDTMList[10+1];
 			//! CDTMList Data Pool Marks Memory
 			bool	poolMarkCDTMList[10];
+			//! CDRecovAction Data Pool Memory
+			CDRecovAction	poolCDRecovAction[10+1];
+			//! CDRecovAction Data Pool Marks Memory
+			bool	poolMarkCDRecovAction[10];
 
 
 			/** \brief This function is used for setting the Component Memory
@@ -217,13 +221,16 @@ public:
 
 		//!Transition Identifiers
 		enum TEDROOMTransitionID{Init,
-			DoHK_FDIR,
 			ExecTC,
+			DoHK_FDIR,
+			DoHK_FDIR_SendRecAction,
+			DoHK_FDIR_NoRecAction,
 			EDROOMMemoryTrans };
 
 
 
 		//!Variables
+		CDRecovAction &VCurrentRecAction;
 		CDTMList &VCurrentTMList;
 		Pr_Time &VNextTimeout;
 
@@ -236,13 +243,21 @@ public:
 			CDTMList	* AllocData();
 		};
 		CEDROOMPOOLCDTMList	& EDROOMPoolCDTMList;
+		class CEDROOMPOOLCDRecovAction:public CEDROOMProtectedMemoryPool {
+			public:
+			CEDROOMPOOLCDRecovAction(TEDROOMUInt32 elemCount,CDRecovAction *pMem, bool *pMarks);
+			CDRecovAction	* AllocData();
+		};
+		CEDROOMPOOLCDRecovAction	& EDROOMPoolCDRecovAction;
 
 
 		//!Constructor
 		EDROOM_CTX_Top_0 (CCHK_FDIRMng &act,
+				CDRecovAction & EDROOMpVarVCurrentRecAction,
 				CDTMList & EDROOMpVarVCurrentTMList,
 				Pr_Time & EDROOMpVarVNextTimeout,
-				CEDROOMPOOLCDTMList & EDROOMpPoolCDTMList );
+				CEDROOMPOOLCDTMList & EDROOMpPoolCDTMList,
+				CEDROOMPOOLCDRecovAction & EDROOMpPoolCDRecovAction );
 
 		//!Copy constructor
 		EDROOM_CTX_Top_0 (EDROOM_CTX_Top_0 &context);
@@ -285,12 +300,27 @@ public:
 		/**
 		 * \brief  
 		 */
+		void	FGetNextRecAction();
+
+		/**
+		 * \brief  
+		 */
 		void	FInitHK_FDIR();
 
 		/**
 		 * \brief  
 		 */
+		void	FSendRecAction();
+
+		/**
+		 * \brief  
+		 */
 		void	FTxTMList();
+
+		/**
+		 * \brief  
+		 */
+		bool	GSendRecAction();
 
 	};
 
@@ -315,12 +345,14 @@ public:
 		EDROOM_CTX_Top_0::TEDROOMStateID edroomNextState;
 
 		//!Variables
+		CDRecovAction VCurrentRecAction;
 		CDTMList VCurrentTMList;
 		Pr_Time VNextTimeout;
 
 
 		// Pools**************************************************
 		CEDROOMPOOLCDTMList	EDROOMPoolCDTMList;
+		CEDROOMPOOLCDRecovAction	EDROOMPoolCDRecovAction;
 
 
 	public:

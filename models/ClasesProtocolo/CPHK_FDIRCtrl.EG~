@@ -14,7 +14,7 @@ SHK_FDIR_TC
 [Version Dato]
 1
 CDTCDescriptor
-Z:\home\osboxes\Desktop\Models\EPD_ICU_ASW_PUS_5_X_12_X\
+Z:\home\osboxes\Desktop\Models\EPD_ICU_ASW_PUS_19_X\
 es.uah.aut.srg.edroom.mclev.data_sai.cdtcdescriptor
 v1
 0
@@ -27,7 +27,7 @@ SRecAction
 [Version Dato]
 1
 CDRecovAction
-Z:\home\osboxes\Desktop\Models\EPD_ICU_ASW_PUS_5_X_12_X\
+Z:\home\osboxes\Desktop\Models\EPD_ICU_ASW_PUS_19_X\
 es.uah.aut.srg.edroom.mclev.data_sai.cdrecovaction
 v1
 0

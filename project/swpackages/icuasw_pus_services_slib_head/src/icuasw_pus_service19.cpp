@@ -155,8 +155,10 @@ void  PUSService19::QueueEventListRecAct( CDEventList & eventList){
  for (int i=0; i< eventList.GetNumberOfEvents(); i++ ){
      uint8_t index;
      if(GetRIDRecActionIndex(eventList.GetEventRID(i),index)){
-         PendingActionIndex[PendingActionNumber]=index;
-         PendingActionNumber++;
+    	 if(EventAction[index].enabled){
+			 PendingActionIndex[PendingActionNumber]=index;
+			 PendingActionNumber++;
+    	 }
      }
  }
 }

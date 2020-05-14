@@ -57,19 +57,19 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: asw_pus_12_x_5_x_rtems_project_students
+all: asw_pus_19_x_rtems_project_students
 
 # Tool invocations
-asw_pus_12_x_5_x_rtems_project_students: $(OBJS) $(USER_OBJS)
+asw_pus_19_x_rtems_project_students: $(OBJS) $(USER_OBJS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: SPARC RTEMS C++ Linker'
-	sparc-rtems-g++ -msoft-float -o "asw_pus_12_x_5_x_rtems_project_students" $(OBJS) $(USER_OBJS) $(LIBS)
+	sparc-rtems-g++ -msoft-float -o "asw_pus_19_x_rtems_project_students" $(OBJS) $(USER_OBJS) $(LIBS)
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(CC_DEPS)$(C++_DEPS)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(S_DEPS)$(S_UPPER_DEPS)$(CPP_DEPS)$(C_DEPS) asw_pus_12_x_5_x_rtems_project_students
+	-$(RM) $(CC_DEPS)$(C++_DEPS)$(C_UPPER_DEPS)$(CXX_DEPS)$(OBJS)$(S_DEPS)$(S_UPPER_DEPS)$(CPP_DEPS)$(C_DEPS) asw_pus_19_x_rtems_project_students
 	-@echo ' '
 
 .PHONY: all clean dependents

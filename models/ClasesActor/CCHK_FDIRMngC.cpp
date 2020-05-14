@@ -11,9 +11,11 @@
 	// CONSTRUCTORS***********************************************
 
 CCHK_FDIRMng::EDROOM_CTX_Top_0::EDROOM_CTX_Top_0(CCHK_FDIRMng &act,
+	 CDRecovAction & EDROOMpVarVCurrentRecAction,
 	 CDTMList & EDROOMpVarVCurrentTMList,
 	 Pr_Time & EDROOMpVarVNextTimeout,
-	 CEDROOMPOOLCDTMList & EDROOMpPoolCDTMList ):
+	 CEDROOMPOOLCDTMList & EDROOMpPoolCDTMList,
+	 CEDROOMPOOLCDRecovAction & EDROOMpPoolCDRecovAction ):
 
 	EDROOMcomponent(act),
 	Msg(EDROOMcomponent.Msg),
@@ -21,9 +23,11 @@ CCHK_FDIRMng::EDROOM_CTX_Top_0::EDROOM_CTX_Top_0(CCHK_FDIRMng &act,
 	HK_FDIRCtrl(EDROOMcomponent.HK_FDIRCtrl),
 	TMChannelCtrl(EDROOMcomponent.TMChannelCtrl),
 	HK_FDIRTimer(EDROOMcomponent.HK_FDIRTimer),
+	VCurrentRecAction(EDROOMpVarVCurrentRecAction),
 	VCurrentTMList(EDROOMpVarVCurrentTMList),
 	VNextTimeout(EDROOMpVarVNextTimeout),
-	EDROOMPoolCDTMList(EDROOMpPoolCDTMList)
+	EDROOMPoolCDTMList(EDROOMpPoolCDTMList),
+	EDROOMPoolCDRecovAction(EDROOMpPoolCDRecovAction)
 {
 }
 
@@ -35,9 +39,11 @@ CCHK_FDIRMng::EDROOM_CTX_Top_0::EDROOM_CTX_Top_0(EDROOM_CTX_Top_0 &context):
 	HK_FDIRCtrl(context.HK_FDIRCtrl),
 	TMChannelCtrl(context.TMChannelCtrl),
 	HK_FDIRTimer(context.HK_FDIRTimer),
+	VCurrentRecAction(context.VCurrentRecAction),
 	VCurrentTMList(context.VCurrentTMList),
 	VNextTimeout(context.VNextTimeout),
-	EDROOMPoolCDTMList(context.EDROOMPoolCDTMList )
+	EDROOMPoolCDTMList(context.EDROOMPoolCDTMList ),
+	EDROOMPoolCDRecovAction(context.EDROOMPoolCDRecovAction )
 {
 
 }
@@ -79,6 +85,7 @@ void	CCHK_FDIRMng::EDROOM_CTX_Top_0::FDoHK_FDIR()
 	PUSService3::DoHK(VCurrentTMList);
 	PUSService12::DoMonitoring(VCurrentTMList, eventList);
 	PUSService5::HandleEvents(eventList, VCurrentTMList);
+	PUSService19::QueueEventListRecAct(eventList);
    //Program absolute timer 
    HK_FDIRTimer.InformAt( time ); 
 }
@@ -97,6 +104,16 @@ void	CCHK_FDIRMng::EDROOM_CTX_Top_0::FExecHK_FDIR_TC()
 
 
 
+void	CCHK_FDIRMng::EDROOM_CTX_Top_0::FGetNextRecAction()
+
+{
+
+	PUSService19::GetNextRecAction(VCurrentRecAction);
+
+}
+
+
+
 void	CCHK_FDIRMng::EDROOM_CTX_Top_0::FInitHK_FDIR()
 
 {
@@ -107,6 +124,21 @@ void	CCHK_FDIRMng::EDROOM_CTX_Top_0::FInitHK_FDIR()
 	VNextTimeout=time;
    //Program absolute timer 
    HK_FDIRTimer.InformAt( time ); 
+}
+
+
+
+void	CCHK_FDIRMng::EDROOM_CTX_Top_0::FSendRecAction()
+
+{
+   //Allocate data from pool
+  CDRecovAction * pSRecAction_Data = EDROOMPoolCDRecovAction.AllocData();
+	
+		// Complete Data 
+	
+	*pSRecAction_Data=VCurrentRecAction;
+   //Send message 
+   HK_FDIRCtrl.send(SRecAction,pSRecAction_Data,&EDROOMPoolCDRecovAction); 
 }
 
 
@@ -127,6 +159,16 @@ void	CCHK_FDIRMng::EDROOM_CTX_Top_0::FTxTMList()
 
 
 
+bool	CCHK_FDIRMng::EDROOM_CTX_Top_0::GSendRecAction()
+
+{
+
+	return (!PUSService19::IsRecActQueueEmpty());
+
+}
+
+
+
 	//********************************** Pools *************************************
 
 	//CEDROOMPOOLCDTMList
@@ -141,6 +183,20 @@ CCHK_FDIRMng::EDROOM_CTX_Top_0::CEDROOMPOOLCDTMList::CEDROOMPOOLCDTMList(
 CDTMList *	CCHK_FDIRMng::EDROOM_CTX_Top_0::CEDROOMPOOLCDTMList::AllocData()
 {
 	return(CDTMList*)CEDROOMProtectedMemoryPool::AllocData();
+}
+
+	//CEDROOMPOOLCDRecovAction
+
+CCHK_FDIRMng::EDROOM_CTX_Top_0::CEDROOMPOOLCDRecovAction::CEDROOMPOOLCDRecovAction(
+			TEDROOMUInt32 elemCount,CDRecovAction* pMem,bool * pMemMarks):
+				CEDROOMProtectedMemoryPool(elemCount, pMem, pMemMarks,
+					sizeof(CDRecovAction))
+{
+}
+
+CDRecovAction *	CCHK_FDIRMng::EDROOM_CTX_Top_0::CEDROOMPOOLCDRecovAction::AllocData()
+{
+	return(CDRecovAction*)CEDROOMProtectedMemoryPool::AllocData();
 }
 
 
@@ -158,12 +214,17 @@ CDTMList *	CCHK_FDIRMng::EDROOM_CTX_Top_0::CEDROOMPOOLCDTMList::AllocData()
 CCHK_FDIRMng::EDROOM_SUB_Top_0::EDROOM_SUB_Top_0 (CCHK_FDIRMng&act
 	,CEDROOMMemory *pEDROOMMemory):
 		EDROOM_CTX_Top_0(act,
+			VCurrentRecAction,
 			VCurrentTMList,
 			VNextTimeout,
-			EDROOMPoolCDTMList),
+			EDROOMPoolCDTMList,
+			EDROOMPoolCDRecovAction),
 		EDROOMPoolCDTMList(
 			10, pEDROOMMemory->poolCDTMList,
-			pEDROOMMemory->poolMarkCDTMList)
+			pEDROOMMemory->poolMarkCDTMList),
+		EDROOMPoolCDRecovAction(
+			10, pEDROOMMemory->poolCDRecovAction,
+			pEDROOMMemory->poolMarkCDRecovAction)
 {
 
 }
@@ -194,15 +255,6 @@ void CCHK_FDIRMng::EDROOM_SUB_Top_0::EDROOMBehaviour()
 				//Next State is Ready
 				edroomNextState = Ready;
 				break;
-			//Next Transition is DoHK_FDIR
-			case (DoHK_FDIR):
-				//Execute Action 
-				FDoHK_FDIR();
-				//Invoke Synchronous Message 
-				FTxTMList();
-				//Next State is Ready
-				edroomNextState = Ready;
-				break;
 			//Next Transition is ExecTC
 			case (ExecTC):
 				//Msg->Data Handling 
@@ -211,6 +263,40 @@ void CCHK_FDIRMng::EDROOM_SUB_Top_0::EDROOMBehaviour()
 				FTxTMList();
 				//Next State is Ready
 				edroomNextState = Ready;
+				break;
+			//To Choice Point DoHK_FDIR
+			case (DoHK_FDIR):
+
+				//Execute Action 
+				FDoHK_FDIR();
+				//Invoke Synchronous Message 
+				FTxTMList();
+				//Evaluate Branch SendRecAction
+				if( GSendRecAction() )
+				{
+					//Execute Action 
+					FGetNextRecAction();
+					//Send Asynchronous Message 
+					FSendRecAction();
+
+					//Branch taken is DoHK_FDIR_SendRecAction
+					edroomCurrentTrans.localId =
+						DoHK_FDIR_SendRecAction;
+
+					//Next State is Ready
+					edroomNextState = Ready;
+				 } 
+				//Default Branch NoRecAction
+				else
+				{
+
+					//Branch taken is DoHK_FDIR_NoRecAction
+					edroomCurrentTrans.localId =
+						DoHK_FDIR_NoRecAction;
+
+					//Next State is Ready
+					edroomNextState = Ready;
+				 } 
 				break;
 		}
 
@@ -296,19 +382,6 @@ TEDROOMTransId CCHK_FDIRMng::EDROOM_SUB_Top_0::EDROOMReadyArrival()
 		switch(Msg->signal)
 		{
 
-			case (EDROOMSignalTimeout): 
-
-				 if (*Msg->GetPInterface() == HK_FDIRTimer)
-				{
-
-					//Next transition is  DoHK_FDIR
-					edroomCurrentTrans.localId= DoHK_FDIR;
-					edroomCurrentTrans.distanceToContext = 0;
-					edroomValidMsg=true;
-				 }
-
-				break;
-
 			case (SHK_FDIR_TC): 
 
 				 if (*Msg->GetPInterface() == HK_FDIRCtrl)
@@ -317,6 +390,19 @@ TEDROOMTransId CCHK_FDIRMng::EDROOM_SUB_Top_0::EDROOMReadyArrival()
 					//Next transition is  ExecTC
 					edroomCurrentTrans.localId= ExecTC;
 					edroomCurrentTrans.distanceToContext = 0;
+					edroomValidMsg=true;
+				 }
+
+				break;
+
+			case (EDROOMSignalTimeout): 
+
+				 if (*Msg->GetPInterface() == HK_FDIRTimer)
+				{
+
+					//Next transition is  DoHK_FDIR
+					edroomCurrentTrans.localId = DoHK_FDIR;
+					edroomCurrentTrans.distanceToContext = 0 ;
 					edroomValidMsg=true;
 				 }
 

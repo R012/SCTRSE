@@ -314,7 +314,7 @@ FFwdBKGTC();
 541 347 322 325 3
 [FinGraficoRama]
 [Transiciones]
-3
+4
 [Version Transicion]
 5
 Init
@@ -386,6 +386,29 @@ DPEleccion
 0
 558 565 553 351 3
 [FinGraficoTransicion]
+RecActionTC
+Ready
+OSubEst
+ValidTC
+DSubEst
+;
+[Trigger]
+HK_FDIRCtrl
+SRecAction
+true
+ 
+ 
+ 
+FHandleRecAction();
+;
+;
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+322 432 518 565 0
+[FinGraficoTransicion]
 [VariablesConstantes]
 3
 [Version VariYConst]
@@ -410,7 +433,7 @@ CDTMList
 Variable
 0
 [Metodos]
-10
+11
 [Version Metodos]
 21
 BasicAction
@@ -478,6 +501,25 @@ RxTC
 EDROOMIRQsignal
 CDTCDescriptor
  
+MsgDataHandler
+FHandleRecAction()
+0
+0
+0
+0
+1
+ 
+4
+	
+		// Data access
+	
+	PUSService19::GetRecActionTCDescriptor(varSRecAction,VCurrentTC);
+[ServiceRequest]
+Msg->data
+HK_FDIRCtrl
+SRecAction
+CDRecovAction
+EDROOMprioNormal
 BasicAction
 FInit()
 0

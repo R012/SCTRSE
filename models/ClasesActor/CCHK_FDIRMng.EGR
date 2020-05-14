@@ -73,11 +73,16 @@ CPHK_FDIRCtrl
 3
 0
 [Pools]
-1
+2
 [Version PoolDatosMens]
 0
 EDROOMPoolCDTMList
 CDTMList
+10
+[Version PoolDatosMens]
+0
+EDROOMPoolCDRecovAction
+CDRecovAction
 10
 [Modulos]
 2
@@ -140,9 +145,56 @@ Ready
 237 224 205 160
 [FinObjetoGrafico]
 [PuntosEleccion]
-0
+1
 [Version PuntosEleccion]
 2
+DoHK_FDIR
+1
+[ObjetoGrafico]
+[Version Objeto Grafico]
+0
+319 492 35 35
+[FinObjetoGrafico]
+DoHK_FDIR
+1
+[Ramas]
+2
+[Version Ramas]
+5
+SendRecAction
+GSendRecAction()
+Ready
+DSubEst
+FGetNextRecAction();
+ 
+ 
+ 
+;
+FSendRecAction();
+;
+;
+[GraficoRama]
+[Version GraficoRama]
+0
+336 492 337 384 1
+[FinGraficoRama]
+NoRecAction
+true
+Ready
+DSubEst
+;
+ 
+ 
+ 
+;
+;
+;
+;
+[GraficoRama]
+[Version GraficoRama]
+0
+350 500 414 384 1
+[FinGraficoRama]
 [Transiciones]
 3
 [Version Transicion]
@@ -170,29 +222,6 @@ true
 0
 110 125 237 304 0
 [FinGraficoTransicion]
-DoHK_FDIR
-Ready
-OSubEst
-Ready
-DSubEst
-FDoHK_FDIR();
-[Trigger]
-HK_FDIRTimer
-EDROOMSignalTimeout
-true
- 
- 
- 
-;
-;
-FTxTMList();
-0
-;
-[GraficoTransicion]
-[Version GraficoTransicion]
-0
-278 224 393 224 4
-[FinGraficoTransicion]
 ExecTC
 Ready
 OSubEst
@@ -216,8 +245,38 @@ FTxTMList();
 0
 442 361 442 258 7
 [FinGraficoTransicion]
+DoHK_FDIR
+Ready
+OSubEst
+DoHK_FDIR
+DPEleccion
+FDoHK_FDIR();
+[Trigger]
+HK_FDIRTimer
+EDROOMSignalTimeout
+true
+ 
+ 
+ 
+;
+;
+FTxTMList();
+0
+;
+[GraficoTransicion]
+[Version GraficoTransicion]
+0
+252 384 319 509 0
+[FinGraficoTransicion]
 [VariablesConstantes]
-2
+3
+[Version VariYConst]
+0
+VCurrentRecAction
+CDRecovAction
+
+Variable
+0
 [Version VariYConst]
 0
 VCurrentTMList
@@ -233,7 +292,7 @@ Pr_Time
 Variable
 0
 [Metodos]
-4
+7
 [Version Metodos]
 21
 Inform
@@ -244,18 +303,19 @@ FDoHK_FDIR()
 0
 1
  
-6
+7
 	VNextTimeout+=Pr_Time(1,0); // Add X sec + Y microsec
 	CDEventList eventList;
 	time=VNextTimeout;
 	PUSService3::DoHK(VCurrentTMList);
 	PUSService12::DoMonitoring(VCurrentTMList, eventList);
 	PUSService5::HandleEvents(eventList, VCurrentTMList);
+	PUSService19::QueueEventListRecAct(eventList);
 [ServiceRequest]
 InformAt
 HK_FDIRTimer
 EDROOMSignalTimeout
-
+ 
 EDROOMprioNormal
 MsgDataHandler
 FExecHK_FDIR_TC()
@@ -274,6 +334,16 @@ HK_FDIRCtrl
 SHK_FDIR_TC
 CDTCDescriptor
 EDROOMprioVeryHigh
+BasicAction
+FGetNextRecAction()
+0
+0
+0
+0
+1
+ 
+1
+	PUSService19::GetNextRecAction(VCurrentRecAction);
 Inform
 FInitHK_FDIR()
 0
@@ -292,6 +362,25 @@ HK_FDIRTimer
 EDROOMSignalTimeout
  
  
+SendMsg
+FSendRecAction()
+0
+0
+0
+0
+1
+ 
+4
+	
+		// Complete Data 
+	
+	*pSRecAction_Data=VCurrentRecAction;
+[ServiceRequest]
+send
+HK_FDIRCtrl
+SRecAction
+CDRecovAction
+EDROOMprioNormal
 InvokeMsg
 FTxTMList()
 0
@@ -312,6 +401,16 @@ TMChannelCtrl
 STxTM
 CDTMList
 EDROOMprioVeryHigh
+Guard
+GSendRecAction()
+0
+0
+0
+0
+1
+ 
+1
+	return (!PUSService19::IsRecActQueueEmpty());
 [MaquinasSubEstados]
 0
 [FinMaquinasSubEstados]

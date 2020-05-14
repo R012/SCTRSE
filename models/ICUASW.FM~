@@ -19,9 +19,9 @@ ICUASW
 [CurrentTarget]
 0
 [MESP Directory]
-z:\home\osboxes\workspaceEDROOM\asw_pus_12_x_5_x_rtems_project_students
+z:\home\osboxes\workspace\asw_pus_19_x_rtems_project_students
 [MESP main Directory]
-z:\home\osboxes\workspaceEDROOM\asw_pus_12_x_5_x_rtems_project_students
+z:\home\osboxes\workspace\asw_pus_19_x_rtems_project_students
 [MESP main prototype]
 rtems_task Init (uint32_t arg)
 [MESP main return]
